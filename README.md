@@ -13,7 +13,7 @@ A few core unist-utils algorithms (combined with ES6), satisfy most of my needs.
 * find
 * select  
 
-But I wanted a more uniform API and enhanced functionality.
+But I wanted a more uniform API and enhanced functionality.  Maybe you will like them too.
 
 ## Installation
 
@@ -23,7 +23,7 @@ You can get the latest release using npm:
 $ npm install unist-utils-core --save
 ```
 
-#Modifications / Enhancements
+# Modifications / Enhancements
 
 ## Node
 Not having a strongly typed parent field was just frustrating.  

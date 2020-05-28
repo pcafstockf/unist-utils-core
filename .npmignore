@@ -1,0 +1,9 @@
+/.github/
+/.idea/
+/ToDo.md
+/src/
+/tst/
+.gitignore
+.editorconfig
+.eslintignore
+tsconfig.json

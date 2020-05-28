@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "ES2015",
+		"module": "commonjs",
+		"lib": [
+			"dom",
+			"es2015"
+		],
+		"declaration": true,
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"removeComments": false,
+		"importHelpers": true,
+		"strict": false,
+		"moduleResolution": "node",
+		"baseUrl": "./",
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"inlineSources": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	},
+	"exclude": [
+		"node_modules",
+		"**/*.spec.ts"
+	]
+}

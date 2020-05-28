@@ -1,0 +1,49 @@
+{
+	"name": "unist-utils-core",
+	"version": "1.0.0",
+	"description": "A collection of commonly used (albeit enhanced) algorithms based on unist and unist-util-xxx",
+	"author": "Frank Stock",
+	"license": "MIT",
+	"keywords": [
+		"tree",
+		"ast",
+		"node",
+		"visit",
+		"walk",
+		"unist",
+		"unist-util"
+	],
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
+	"typings": "./lib/index.d.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"/ReadMe.md",
+		"/License.txt",
+		"/package.json",
+		"/lib"
+	],
+	"scripts": {
+		"clean": "rimraf ./lib",
+		"fullclean": "npm run clean && rimraf ./package-lock.json && rimraf ./node_modules",
+		"build": "npm run clean && tsc -p tsconfig.json",
+		"lint": "tslint -c tslint.json 'src/**/*.ts'"
+	},
+	"dependencies": {
+		"tslib": "~1.13.0",
+		"unist-util-is": "^4.0.2",
+		"unist-util-select": "^3.0.1"
+	},
+	"devDependencies": {
+		"@types/unist": "^2.0.3",
+		"@types/unist-util-is": "^4.0.1",
+		"rimraf": "~3.0.2",
+		"source-map-support": "~0.5.19",
+		"ts-lint": "^4.5.1",
+		"ts-node": "~8.9.1",
+		"tsconfig-paths": "~3.9.0",
+		"typescript": "~3.8.3"
+	}
+}

@@ -47,7 +47,11 @@ export function findAll<T extends Node>(tree: T | T[], tst: Test<T>) {
 export function findAncestor<T extends Node>(node: T, tst: Test<T>) {
 	let is = test(<Test<T>>tst);
 	let results: T[] = [];
-	while (node && node.parent && is(node.parent))
-		results.push(node.parent);
+	while (node && node.parent) {
+		results.unshift(<any>node.parent);
+		if (is(node.parent))
+			break;
+		node = <any>node.parent;
+	}
 	return results;
 }

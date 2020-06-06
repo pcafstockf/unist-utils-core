@@ -72,9 +72,9 @@ if (test(node, (n) => !!n)) {
 
 ## Find
 [unist-util-find](https://github.com/blahah/unist-util-find) is usefule, but doesn't use [unist-util-is](https://github.com/syntax-tree/unist-util-is) for it's tests (maybe because of the true/false thing mentioned above).  
-I also needed findAll.
+I also needed findAll and findAncestor.
 ```
-import {find, findAll} from 'unist-utils-core';
+import {find, findAll, findAncestor} from 'unist-utils-core';
 
 findAll(tree, (node) => node.type === 'foo').map(n => whatever(n));
 ```

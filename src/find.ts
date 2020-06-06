@@ -10,7 +10,7 @@ import {CONTINUE, EXIT, visit} from './visit';
  */
 export function find<T extends Node>(tree: T | T[], tst: Test<T>) {
 	let is = test(<Test<T>>tst);
-	let result = undefined;
+	let result: T = undefined;
 	visit(tree, is, function (node) {
 		result = node;
 		return EXIT;
@@ -27,10 +27,27 @@ export function find<T extends Node>(tree: T | T[], tst: Test<T>) {
  */
 export function findAll<T extends Node>(tree: T | T[], tst: Test<T>) {
 	let is = test(<Test<T>>tst);
-	var results = [];
+	let results: T[] = [];
 	visit(tree, is, function (node) {
 		results.push(node);
 		return CONTINUE;
 	});
+	return results;
+}
+
+/**
+ * Search upward (using the Node.parent property) for an ancestor that meets a supplied test.
+ *
+ * @param node  The node from which to start the upward search.
+ * @param [tst] - 'is-compatible' test to apply to each parent along the upward walk.
+ * @returns An array representing the "path" to the first ancestor that matched the condition.
+ *          The first element in the "path" array will be the ancestor that matched the condition, and the node's immediate parent will be the last element of the array.
+ *          If no ancestors were found (or none passed the test), an empty array will be returned.
+ */
+export function findAncestor<T extends Node>(node: T, tst: Test<T>) {
+	let is = test(<Test<T>>tst);
+	let results: T[] = [];
+	while (node && node.parent && is(node.parent))
+		results.push(node.parent);
 	return results;
 }

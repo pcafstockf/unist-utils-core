@@ -32,7 +32,7 @@ export type Index = number
  */
 export type ActionTuple = [Action, Index]
 
-export type VistorResult = void | Action | Index | ActionTuple;
+export type VisitorResult = void | Action | Index | ActionTuple;
 
 /**
  * Invoked when a node (matching test, if given) is found.
@@ -57,7 +57,7 @@ export type VistorResult = void | Action | Index | ActionTuple;
  *          tuple (Array.<*>) — List with one or two values, the first an action, the second and index.
  *              Note that passing a tuple only makes sense if the action is SKIP. If the action is EXIT, that action can be returned. If the action is CONTINUE, index can be returned.
  */
-export type Visitor<T extends Node, P extends Parent> = (node: T, index: number, parents: P[]) => VistorResult;
+export type Visitor<T extends Node, P extends Parent> = (node: T, index: number, parents: P[]) => VisitorResult;
 
 
 /**
@@ -111,7 +111,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
  * @param options   Options for controlling the visit @see VisitOptions.  If you pass a boolean, it is used for {VisitOptions.reverse}.  default is false
  */
 export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test<T> | Visitor<T, P>, visitor?: Visitor<T, P> | boolean | VisitOptions, options?: boolean | VisitOptions) {
-	if (typeof test === 'function' && typeof visitor !== 'function') {
+	if (typeof tst === 'function' && typeof visitor !== 'function') {
 		options = <any>visitor;
 		visitor = <Visitor<T, P>>tst;
 		tst = null;
@@ -128,15 +128,15 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 	// Visit a single node.
 	function one(node: T, index: number, parents: P[]) {
 		let result = [];
-		let subresult;
-		if (!test || is(node, index, parents[parents.length - 1] || null)) {
+		let subResult;
+		if (!tst || is(node, index, parents[parents.length - 1] || null)) {
 			result = toResult((<Visitor<T, P>>visitor)(node, index, parents));
 			if (result[0] === EXIT)
 				return result;
 		}
 		if (node.children && result[0] !== SKIP) {
-			subresult = toResult(all(<T[]>node.children, parents.concat(<any>node)));
-			return subresult[0] === EXIT ? subresult : result;
+			subResult = toResult(all(<T[]>node.children, parents.concat(<any>node)));
+			return subResult[0] === EXIT ? subResult : result;
 		}
 		return result;
 	}

@@ -1,6 +1,6 @@
 {
 	"name": "unist-utils-core",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A collection of commonly used (albeit enhanced) algorithms based on unist and unist-util-xxx",
 	"author": "Frank Stock",
 	"license": "MIT",
@@ -28,7 +28,8 @@
 	"scripts": {
 		"clean": "rimraf ./lib",
 		"fullclean": "npm run clean && rimraf ./package-lock.json && rimraf ./node_modules",
-		"build": "npm run clean && tsc -p tsconfig.json"
+		"build": "npm run clean && tsc -p tsconfig.json",
+		"test": "ts-node node_modules/tape/bin/tape tst/**/*.ts"
 	},
 	"dependencies": {
 		"tslib": "^1.13.0",
@@ -36,10 +37,12 @@
 		"unist-util-select": "^3.0.1"
 	},
 	"devDependencies": {
+		"@types/tape": "^4.13.0",
 		"@types/unist": "^2.0.3",
 		"@types/unist-util-is": "^4.0.1",
 		"rimraf": "^3.0.2",
 		"source-map-support": "^0.5.19",
+		"tape": "^5.0.1",
 		"ts-node": "^8.10.2",
 		"tsconfig-paths": "^3.9.0",
 		"typescript": "~3.8.3"

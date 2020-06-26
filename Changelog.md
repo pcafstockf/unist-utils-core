@@ -12,3 +12,6 @@
 ## 1.0.3 / 2020/06/08  
 * Unit tests for, and fixes to, the find module.
 * Declaration fixes for the test module and visit module.
+
+## 1.0.4 / 2020/06/23  
+* Add support for asynchronous visitors.

@@ -88,7 +88,7 @@ export interface VisitOptions {
 	postTraverse?: boolean;
 }
 
-function toResult(value) {
+export function vistorResultToTuple(value) {
 	if (value !== null && typeof value === 'object' && 'length' in value)
 		return value;
 	if (typeof value === 'number')
@@ -130,12 +130,12 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 		let result = [];
 		let subResult;
 		if (!tst || is(node, index, parents[parents.length - 1] || null)) {
-			result = toResult((<Visitor<T, P>>visitor)(node, index, parents));
+			result = vistorResultToTuple((<Visitor<T, P>>visitor)(node, index, parents));
 			if (result[0] === EXIT)
 				return result;
 		}
 		if (node.children && result[0] !== SKIP) {
-			subResult = toResult(all(<T[]>node.children, parents.concat(<any>node)));
+			subResult = vistorResultToTuple(all(<T[]>node.children, parents.concat(<any>node)));
 			return subResult[0] === EXIT ? subResult : result;
 		}
 		return result;

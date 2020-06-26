@@ -31,6 +31,13 @@
 		"build": "npm run clean && tsc -p tsconfig.json",
 		"test": "ts-node node_modules/tape/bin/tape tst/**/*.ts"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pcafstockf/unist-utils-core.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pcafstockf/unist-utils-core/issues"
+	},
 	"dependencies": {
 		"tslib": "^1.13.0",
 		"unist-util-is": "^4.0.2",

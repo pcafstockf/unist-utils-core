@@ -134,9 +134,12 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 			if (result[0] === EXIT)
 				return result;
 		}
-		if (node.children && result[0] !== SKIP) {
-			subResult = vistorResultToTuple(all(<T[]>node.children, parents.concat(<any>node)));
-			return subResult[0] === EXIT ? subResult : result;
+		if (result[0] !== SKIP) {
+			let c = <T[]>node.children;
+			if (c) {
+				subResult = vistorResultToTuple(all(c, parents.concat(<any>node)));
+				return subResult[0] === EXIT ? subResult : result;
+			}
 		}
 		return result;
 	}

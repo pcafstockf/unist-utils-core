@@ -1,6 +1,6 @@
 {
 	"name": "unist-utils-core",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "A collection of commonly used (albeit enhanced) algorithms based on unist and unist-util-xxx",
 	"author": "Frank Stock",
 	"license": "MIT",

@@ -15,3 +15,6 @@
 
 ## 1.0.4 / 2020/06/23  
 * Add support for asynchronous visitors.
+
+## 1.0.5 / 2020/07/06  
+* Optimize visits for nodes that provide their children via an function(aka getter).

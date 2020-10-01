@@ -73,7 +73,7 @@ export interface VisitOptions {
 	/**
 	 *  When true, the Visitor will be called once for every Node which has children, before those children are visited.
 	 *  The Visitor will be invoked as:
-	 *      Visitor(undefined, Number.MIN_SAFE_INTEGER, parents);
+	 *      Visitor(undefined, PreTraversalIndex (aka Number.MIN_SAFE_INTEGER), parents);
 	 *          NOTE: parents[parents.length-1] will be the Node whose children are about to be visited.
 	 * (default: false)
 	 */
@@ -81,12 +81,14 @@ export interface VisitOptions {
 	/**
 	 *  When true, the Visitor will be called once for every Node which has children, after those children have been visited.
 	 *  The Visitor will be invoked as:
-	 *      Visitor(undefined, Number.MAX_SAFE_INTEGER, parents);
+	 *      Visitor(undefined, PostTraversalIndex (aka Number.MAX_SAFE_INTEGER), parents);
 	 *          NOTE: parents[parents.length-1] will be the Node whose children have just been visited
 	 * (default: false)
 	 */
 	postTraverse?: boolean;
 }
+export const PreTraversalIndex = Number.MIN_SAFE_INTEGER;
+export const PostTraversalIndex = Number.MAX_SAFE_INTEGER;
 
 export function vistorResultToTuple(value) {
 	if (value !== null && typeof value === 'object' && 'length' in value)
@@ -130,14 +132,16 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 		let result = [];
 		let subResult;
 		if (!tst || is(node, index, parents[parents.length - 1] || null)) {
-			result = vistorResultToTuple((<Visitor<T, P>>visitor)(node, index, parents));
+			let aResult = (<Visitor<T, P>>visitor)(node, index, parents);
+			result = vistorResultToTuple(aResult);
 			if (result[0] === EXIT)
 				return result;
 		}
 		if (result[0] !== SKIP) {
 			let c = <T[]>node.children;
 			if (c) {
-				subResult = vistorResultToTuple(all(c, parents.concat(<any>node)));
+				let aSubResult = all(c, parents.concat(<any>node));
+				subResult = vistorResultToTuple(aSubResult);
 				return subResult[0] === EXIT ? subResult : result;
 			}
 		}
@@ -151,7 +155,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 		let index = (opts.reverse ? children.length : min) + step;
 		let result;
 		if (opts.preTraverse)
-			(<Visitor<T, P>>visitor)(undefined, Number.MIN_SAFE_INTEGER, parents);
+			(<Visitor<T, P>>visitor)(undefined, PreTraversalIndex, parents);
 		while (index > min && index < children.length) {
 			result = one(children[index], index, parents);
 			if (result[0] === EXIT)
@@ -159,7 +163,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 			index = typeof result[1] === 'number' ? result[1] : index + step;
 		}
 		if (opts.postTraverse)
-			(<Visitor<T, P>>visitor)(undefined, Number.MAX_SAFE_INTEGER, parents);
+			(<Visitor<T, P>>visitor)(undefined, PostTraversalIndex, parents);
 		if (result)
 			return result;
 	}

@@ -18,3 +18,5 @@
 
 ## 1.0.5 / 2020/07/06  
 * Optimize visits for nodes that provide their children via an accessor (aka getter).
+* Improve/enhance the type signature for find*.
+* Add Pre/Post traversal constants for better code readability.

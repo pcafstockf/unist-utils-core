@@ -8,7 +8,7 @@ import {CONTINUE, EXIT, visit} from './visit';
  * @param {Node} tree - Node(s) to search
  * @param [tst] - 'is-compatible' test (such as a type).
  */
-export function find<T extends Node>(tree: T | T[], tst: Test<T>) {
+export function find<T extends Node>(tree: T | T[], tst: Test<T>): T {
 	let is = test(tst);
 	let result: T = undefined;
 	visit(tree, is, function (node) {
@@ -25,7 +25,7 @@ export function find<T extends Node>(tree: T | T[], tst: Test<T>) {
  * @param [tst] - 'is-compatible' test (such as a type).
  * @returns an Array of zero or more Nodes in the tree that matched the condition.
  */
-export function findAll<T extends Node>(tree: T | T[], tst: Test<T>) {
+export function findAll<T extends Node>(tree: T | T[], tst: Test<T>): T[] {
 	let is = test(tst);
 	let results: T[] = [];
 	visit(tree, is, function (node) {
@@ -44,14 +44,14 @@ export function findAll<T extends Node>(tree: T | T[], tst: Test<T>) {
  *          The first element in the "path" array will be the ancestor that matched the condition, and the node's immediate parent will be the last element of the array.
  *          If no ancestors were found (or none passed the test), an empty array will be returned.
  */
-export function findAncestor<T extends Parent>(node: Node, tst: Test<T>) {
+export function findAncestor<T extends Parent, V=T>(node: Node, tst: Test<T>): V[] {
 	let is = test(tst);
-	let results: T[] = [];
+	let results: V[] = [];
 	while (node && node.parent) {
-		results.unshift(<T>node.parent);
+		results.unshift(<any>node.parent);
 		if (is(<T>node.parent))
 			return results;
 		node = <T>node.parent;
 	}
-	return [];
+	return <V[]>[];
 }

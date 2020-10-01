@@ -1,6 +1,6 @@
 import {Node, Parent} from './nodes';
 import {test, Test} from './test';
-import {EXIT, SKIP, VisitOptions, VisitorResult, vistorResultToTuple} from './visit';
+import {EXIT, PostTraversalIndex, PreTraversalIndex, SKIP, VisitOptions, VisitorResult, vistorResultToTuple} from './visit';
 
 export type AsyncVisitor<T extends Node, P extends Parent> = (node: T, index: number, parents: P[]) => Promise<VisitorResult>;
 
@@ -42,7 +42,7 @@ export async function visitAsync<T extends Node, P extends Parent>(tree: T | T[]
 		if (result[0] !== SKIP) {
 			let c = <T[]>node.children;
 			if (c) {
-				let aSubResult = await all(<T[]>node.children, parents.concat(<any>node));
+				let aSubResult = await all(c, parents.concat(<any>node));
 				subResult = vistorResultToTuple(aSubResult);
 				return subResult[0] === EXIT ? subResult : result;
 			}
@@ -57,7 +57,7 @@ export async function visitAsync<T extends Node, P extends Parent>(tree: T | T[]
 		let index = (opts.reverse ? children.length : min) + step;
 		let result;
 		if (opts.preTraverse)
-			await (<AsyncVisitor<T, P>>visitor)(undefined, Number.MIN_SAFE_INTEGER, parents);
+			await (<AsyncVisitor<T, P>>visitor)(undefined, PreTraversalIndex, parents);
 		while (index > min && index < children.length) {
 			result = await one(children[index], index, parents);
 			if (result[0] === EXIT)
@@ -65,7 +65,7 @@ export async function visitAsync<T extends Node, P extends Parent>(tree: T | T[]
 			index = typeof result[1] === 'number' ? result[1] : index + step;
 		}
 		if (opts.postTraverse)
-			await (<AsyncVisitor<T, P>>visitor)(undefined, Number.MAX_SAFE_INTEGER, parents);
+			await (<AsyncVisitor<T, P>>visitor)(undefined, PostTraversalIndex, parents);
 		if (result)
 			return result;
 	}

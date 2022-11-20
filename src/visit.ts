@@ -138,7 +138,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 				return result;
 		}
 		if (result[0] !== SKIP) {
-			let c = <T[]>node.children;
+			let c = (node as any).children as T[];
 			if (c) {
 				let aSubResult = all(c, parents.concat(<any>node));
 				subResult = vistorResultToTuple(aSubResult);

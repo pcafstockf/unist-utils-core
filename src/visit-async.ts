@@ -40,7 +40,7 @@ export async function visitAsync<T extends Node, P extends Parent>(tree: T | T[]
 				return result;
 		}
 		if (result[0] !== SKIP) {
-			let c = <T[]>node.children;
+			let c = (node as any).children as T[];
 			if (c) {
 				let aSubResult = await all(c, parents.concat(<any>node));
 				subResult = vistorResultToTuple(aSubResult);

@@ -5,7 +5,7 @@ import tape from 'tape';
 
 
 // Define a test fixture.
-const tree = <Parent>{
+const tree = {
 	'type': 'root',
 	'children': [
 		{
@@ -31,7 +31,7 @@ const tree = <Parent>{
 			]
 		}
 	]
-};
+} as any as Parent;
 // Add parental info to our json tree (normally our parser would generate this).
 visit(tree, (node, idx, parents) => {
 	node.parent = parents[parents.length - 1];
@@ -44,7 +44,7 @@ tape('Function: find', function (t) {
 	t.test('should find with string condition', function (st) {
 		let result = find(tree, 'text');
 
-		st.equal(result, tree.children[0].children[0]);
+		st.equal(result, (tree.children[0] as Parent).children[0]);
 
 		st.end();
 	});
@@ -52,7 +52,7 @@ tape('Function: find', function (t) {
 	t.test('should find with object condition', function (st) {
 		let result = find(tree, {type: 'emphasis'});
 
-		st.equal(result, tree.children[0].children[1]);
+		st.equal(result, (tree.children[0] as Parent).children[1]);
 
 		st.end();
 	});
@@ -62,7 +62,7 @@ tape('Function: find', function (t) {
 			return node.type === 'inlineCode';
 		});
 
-		st.equal(result, tree.children[0].children[5]);
+		st.equal(result, (tree.children[0] as Parent).children[5]);
 
 		st.end();
 	});
@@ -81,7 +81,7 @@ tape('Function: findAll', function (t) {
 		let results = findAll(tree, 'text');
 
 		st.equal(results.length, 6);
-		st.equal(results[1].value, tree.children[0].children[1].children[0].value);
+		st.equal((results[1] as any).value, (((tree.children[0] as Parent).children[1] as Parent).children[0] as any).value);
 
 		st.end();
 	});
@@ -90,7 +90,7 @@ tape('Function: findAll', function (t) {
 		let results = findAll(tree, {type: 'emphasis'});
 
 		st.equal(results.length, 1);
-		st.equal(results[0], tree.children[0].children[1]);
+		st.equal(results[0], (tree.children[0] as Parent).children[1]);
 
 		st.end();
 	});
@@ -101,7 +101,7 @@ tape('Function: findAll', function (t) {
 		});
 
 		st.equal(results.length, 1);
-		st.equal(results[0], tree.children[0].children[5]);
+		st.equal(results[0], (tree.children[0] as Parent).children[5]);
 
 		st.end();
 	});
@@ -117,18 +117,18 @@ tape('Function: findAll', function (t) {
 
 tape('Function: findAncestor', function (t) {
 	t.test('should find existing ancestor', function (st) {
-		let node = tree.children[0].children[1].children[0];
+		let node = ((tree.children[0] as Parent).children[1] as Parent).children[0];
 		let results = findAncestor(node, 'paragraph');
 
 		st.equal(results.length, 2);
-		st.equal(results[results.length - 1].value, node.parent.value);
+		st.equal((results[results.length - 1] as any).value, (node.parent as any).value);
 		st.equal(results[0].parent.type, 'root');
 
 		st.end();
 	});
 
 	t.test('should return empty list when no ancestor found', function (st) {
-		let node = tree.children[0].children[1].children[0];
+		let node = ((tree.children[0] as Parent).children[1] as Parent).children[0];
 		let results = findAncestor(node, 'foobar');
 
 		st.equal(results.length, 0);

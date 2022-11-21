@@ -170,7 +170,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 
 	// Begin
 	if (Array.isArray(tree))
-		all(tree, []);
+		return all(tree, []);
 	else
-		one(tree, null, []);
+		return one(tree, null, []);
 }

@@ -21,6 +21,11 @@
 * Improve/enhance the type signature for find*.
 * Add Pre/Post traversal constants for better code readability.
 
-## 1.0.5 / 2022/11/19
+## 1.0.6 / 2022/11/19
 * Update dependencies.
 * Remove david-dm based dependencies badge from ReadMe.
+
+## 1.0.7 / 2023/01/18
+Update dev dependencies.
+Update github workflows.
+Update badges in main ReadMe.

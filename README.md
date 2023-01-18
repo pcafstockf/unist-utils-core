@@ -1,8 +1,9 @@
 # unist-utils-core
-[![Actions Status](https://github.com/pcafstockf/unist-utils-core/workflows/CI/badge.svg)](https://github.com/pcafstockf/unist-utils-core/actions)
-[![Actions Status](https://github.com/pcafstockf/unist-utils-core/workflows/NPM%20Publish/badge.svg)](https://github.com/pcafstockf/unist-utils-core/actions)
+[![CI Actions](https://github.com/pcafstockf/unist-utils-core/workflows/CI/badge.svg)](https://github.com/pcafstockf/unist-utils-core/actions)
+[![Publish Actions](https://github.com/pcafstockf/unist-utils-core/workflows/NPM%20Publish/badge.svg)](https://github.com/pcafstockf/unist-utils-core/actions)
 [![npm version](https://badge.fury.io/js/unist-utils-core.svg)](https://badge.fury.io/js/unist-utils-core)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![OSS Lifecycle](https://img.shields.io/osslifecycle/pcafstockf/unist-utils-core.svg)
 
 A collection of commonly used (albeit enhanced) algorithms based on [unist](https://github.com/syntax-tree/unist) and [unist-util-xxx](https://github.com/syntax-tree/unist#list-of-utilities).
 

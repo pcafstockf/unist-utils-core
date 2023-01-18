@@ -26,6 +26,7 @@
 * Remove david-dm based dependencies badge from ReadMe.
 
 ## 1.0.7 / 2023/01/18
+Ensure visit returns a result.
 Update dev dependencies.
 Update github workflows.
 Update badges in main ReadMe.

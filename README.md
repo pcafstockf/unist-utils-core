@@ -95,7 +95,7 @@ If any of these ideas sound useful, feel free to merge them in and I'll phase th
 
 ## MIT License
 
-Copyright (c) 2020 Frank Stock
+Copyright (c) 2020-2023 Frank Stock
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

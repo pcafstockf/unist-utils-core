@@ -45,6 +45,7 @@ export type VisitorResult = void | Action | Index | ActionTuple;
  * @param node  The active Node
  * @param index Index of Node within it's Parent's list of children.
  * @param parents   Ancestors of node (parent of node will be parents[parents.length-1])
+ * @param ctx   Whatever was originally provided to @see VisitOptions.context
  * @returns The return value can have the following forms:
  *          index (number) — Treated as a tuple of [CONTINUE, index]
  *               Move to the sibling at index next (after node itself is completely traversed).
@@ -57,13 +58,13 @@ export type VisitorResult = void | Action | Index | ActionTuple;
  *          tuple (Array.<*>) — List with one or two values, the first an action, the second and index.
  *              Note that passing a tuple only makes sense if the action is SKIP. If the action is EXIT, that action can be returned. If the action is CONTINUE, index can be returned.
  */
-export type Visitor<T extends Node, P extends Parent> = (node: T, index: number, parents: P[]) => VisitorResult;
+export type Visitor<T extends Node, P extends Parent, C extends any = never> = (node: T, index: number, parents: P[], ctx: C) => VisitorResult;
 
 
 /**
  * Options for more control over visitation.
  */
-export interface VisitOptions {
+export interface VisitOptions<C extends any = never> {
 	/**
 	 * When false, the tree is traversed in preorder (NLR), visiting the node itself, then its head, etc.
 	 * When true, the tree is traversed in reverse preorder (NRL): the node itself is visited, then its tail, etc.
@@ -86,23 +87,29 @@ export interface VisitOptions {
 	 * (default: false)
 	 */
 	postTraverse?: boolean;
+	/**
+	 * Caller defined context that will be passed to every invocation of the @see Visitor.
+	 */
+	context?: C;
 }
 export const PreTraversalIndex = Number.MIN_SAFE_INTEGER;
 export const PostTraversalIndex = Number.MAX_SAFE_INTEGER;
 
-export function vistorResultToTuple(value) {
+export function visitorResultToTuple(value) {
 	if (value !== null && typeof value === 'object' && 'length' in value)
 		return value;
 	if (typeof value === 'number')
 		return [CONTINUE, value];
 	return [value];
 }
+// Backwards compatible fix of spelling error.
+export const vistorResultToTuple = visitorResultToTuple;
 
 // Various call overload forms.
-export function visit<T extends Node, P extends Parent>(tree: T | T[], visitor: Visitor<T, P>);
-export function visit<T extends Node, P extends Parent>(tree: T | T[], visitor: Visitor<T, P>, options: boolean | VisitOptions);
-export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test<T>, visitor: Visitor<T, P>);
-export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test<T>, visitor: Visitor<T, P>, options: boolean | VisitOptions);
+export function visit<T extends Node<any>, P extends Parent<T>, C extends any = never>(tree: T | T[], visitor: Visitor<T, P, C>);
+export function visit<T extends Node<any>, P extends Parent<T>, C extends any = never>(tree: T | T[], visitor: Visitor<T, P, C>, options: boolean | VisitOptions<C>);
+export function visit<T extends Node<any>, P extends Parent<T>, C extends any = never>(tree: T | T[], tst: Test<T>, visitor: Visitor<T, P, C>);
+export function visit<T extends Node<any>, P extends Parent<T>, C extends any = never>(tree: T | T[], tst: Test<T>, visitor: Visitor<T, P, C>, options: boolean | VisitOptions<C>);
 /**
  *  Visit nodes (inclusive descendants of tree), with ancestral information. Optionally filtering nodes. Optionally in reverse, Optionally wrapping child visitation with pre/post visits.
  *  This algorithm performs depth-first tree traversal in preorder (NLR), or if reverse is given, in reverse preorder (NRL).
@@ -112,13 +119,13 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
  * @param visitor    Function invoked when a node is found that passes test @see Visitor
  * @param options   Options for controlling the visit @see VisitOptions.  If you pass a boolean, it is used for {VisitOptions.reverse}.  default is false
  */
-export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test<T> | Visitor<T, P>, visitor?: Visitor<T, P> | boolean | VisitOptions, options?: boolean | VisitOptions) {
+export function visit<T extends Node<any>, P extends Parent<T>, C extends any = never>(tree: T | T[], tst: Test<T> | Visitor<T, P, C>, visitor?: Visitor<T, P, C> | boolean | VisitOptions<C>, options?: boolean | VisitOptions<C>) {
 	if (typeof tst === 'function' && typeof visitor !== 'function') {
 		options = <any>visitor;
-		visitor = <Visitor<T, P>>tst;
+		visitor = <Visitor<T, P, C>>tst;
 		tst = null;
 	}
-	let opts: VisitOptions;
+	let opts: VisitOptions<C>;
 	if (typeof options === 'boolean')
 		opts = {reverse: options};
 	else if (!options)
@@ -132,8 +139,8 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 		let result = [];
 		let subResult;
 		if (!tst || is(node, index, parents[parents.length - 1] || null)) {
-			let aResult = (<Visitor<T, P>>visitor)(node, index, parents);
-			result = vistorResultToTuple(aResult);
+			let aResult = (<Visitor<T, P, C>>visitor)(node, index, parents, opts.context);
+			result = visitorResultToTuple(aResult);
 			if (result[0] === EXIT)
 				return result;
 		}
@@ -141,7 +148,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 			let c = (node as any).children as T[];
 			if (c) {
 				let aSubResult = all(c, parents.concat(<any>node));
-				subResult = vistorResultToTuple(aSubResult);
+				subResult = visitorResultToTuple(aSubResult);
 				return subResult[0] === EXIT ? subResult : result;
 			}
 		}
@@ -155,7 +162,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 		let index = (opts.reverse ? children.length : min) + step;
 		let result;
 		if (opts.preTraverse)
-			(<Visitor<T, P>>visitor)(undefined, PreTraversalIndex, parents);
+			(<Visitor<T, P, C>>visitor)(undefined, PreTraversalIndex, parents, opts.context);
 		while (index > min && index < children.length) {
 			result = one(children[index], index, parents);
 			if (result[0] === EXIT)
@@ -163,7 +170,7 @@ export function visit<T extends Node, P extends Parent>(tree: T | T[], tst: Test
 			index = typeof result[1] === 'number' ? result[1] : index + step;
 		}
 		if (opts.postTraverse)
-			(<Visitor<T, P>>visitor)(undefined, PostTraversalIndex, parents);
+			(<Visitor<T, P, C>>visitor)(undefined, PostTraversalIndex, parents, opts.context);
 		if (result)
 			return result;
 	}

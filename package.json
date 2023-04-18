@@ -1,6 +1,6 @@
 {
 	"name": "unist-utils-core",
-	"version": "1.0.8",
+	"version": "1.1.0",
 	"description": "A collection of commonly used (albeit enhanced) algorithms based on unist and unist-util-xxx",
 	"author": "Frank Stock",
 	"license": "MIT",
@@ -44,13 +44,13 @@
 		"unist-util-select": "^3.0.4"
 	},
 	"devDependencies": {
-		"@types/tape": "^4.13.2",
+		"@types/tape": "^4.13.4",
 		"@types/unist": "^2.0.6",
 		"rimraf": "^4.1.1",
 		"source-map-support": "^0.5.21",
 		"tape": "^5.6.3",
 		"ts-node": "^10.9.1",
 		"tsconfig-paths": "^4.1.2",
-		"typescript": "~4.9.4"
+		"typescript": "~4.9.5"
 	}
 }

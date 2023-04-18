@@ -1,3 +1,8 @@
+## 1.1.0 / 2023-04-18
+* Enhance definition of Node.parent to be more type friendly.
+* Add ability to pass context for visits.
+* Update dependencies.
+
 ## 1.0.8 / 2023-01-18
 * No code changes.
 * Updates to docs for consistency across projects.

@@ -7,7 +7,7 @@
 
 A collection of commonly used (albeit enhanced) algorithms based on [unist](https://github.com/syntax-tree/unist) and [unist-util-xxx](https://github.com/syntax-tree/unist#list-of-utilities).
 
-## Why???
+## Why yet another unist utility?
 A few core unist-utils algorithms (combined with ES6), satisfy most of my needs.  They are:  
 * test
 * visit
@@ -42,10 +42,11 @@ node.parent.children.find(n => Object.is(n, node));
 [unist-util-visit-children](https://github.com/syntax-tree/unist-util-visit-children) can pass an array of nodes, but incurs overhead with narrow applicability.  
 [unist-util-visit-parents](https://github.com/syntax-tree/unist-util-visit-parents) takes extra processing to determine a node's index in the list of children.  
 Also, I wanted an easy way to hook begin/end visitation of a node's children.  
+Optional support has been added for a caller defined context that can be passed to the Visitor.
 ```
 import {visit} from 'unist-utils-core';
 
-visit(tree.children, (node, idx, parents) => {
+visit(tree.children, (node, idx, parents, ctx) => {
     if (node) {
         // Normal visitation of 'node'.
         return whatever;
